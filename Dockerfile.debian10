@@ -1,0 +1,34 @@
+FROM debian:10
+
+LABEL comment="barebox Debian 10 build environment" \
+      maintainer="Antony Pavlov <antonynpavlov@gmail.com>"
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		git less \
+		make gcc libc6-dev \
+		flex bison \
+		inkscape \
+		bzip2 lzop lz4 pkg-config xz-utils \
+		libusb-1.0-0-dev libssl-dev libncursesw5-dev \
+		wget ca-certificates \
+		gcc-mips-linux-gnu \
+		gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross gcc-aarch64-linux-gnu \
+	&& apt-get clean
+
+# Simple root password in case we want to customize the container
+RUN echo "root:root" | chpasswd
+
+# Add default user
+ENV BUILDUSER builduser
+ENV WORKDIR /home/$BUILDUSER
+
+RUN useradd -ms /bin/bash $BUILDUSER
+
+USER $BUILDUSER
+
+WORKDIR $WORKDIR
+
+COPY --chown=$BUILDUSER:$BUILDUSER MKALL-barebox.sh $WORKDIR
+
+ENTRYPOINT [ "/bin/bash" ]
