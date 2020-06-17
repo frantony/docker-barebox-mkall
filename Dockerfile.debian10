@@ -3,6 +3,10 @@ FROM debian:10
 LABEL comment="barebox Debian 10 build environment" \
       maintainer="Antony Pavlov <antonynpavlov@gmail.com>"
 
+# Add default user
+ENV BUILDUSER builduser
+ENV WORKDIR /home/$BUILDUSER
+
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		git less \
@@ -14,16 +18,11 @@ RUN apt-get update \
 		wget ca-certificates \
 		gcc-mips-linux-gnu \
 		gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross gcc-aarch64-linux-gnu \
-	&& apt-get clean
-
-# Simple root password in case we want to customize the container
-RUN echo "root:root" | chpasswd
-
-# Add default user
-ENV BUILDUSER builduser
-ENV WORKDIR /home/$BUILDUSER
-
-RUN useradd -ms /bin/bash $BUILDUSER
+		sudo \
+	&& apt-get clean \
+	&& useradd -ms /bin/bash $BUILDUSER \
+	&& adduser $BUILDUSER sudo \
+	&& echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/sudo-nopasswd
 
 USER $BUILDUSER
 
