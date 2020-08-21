@@ -21,6 +21,7 @@ touch arch/arm/boards/plathome-openblocks-ax3/binary.0
 touch arch/arm/boards/turris-omnia/binary.0
 touch firmware/fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
 touch firmware/imx8mm-bl31.bin
+touch firmware/imx8mp-bl31.bin
 touch firmware/imx8mq-bl31.bin
 touch firmware/lpddr4_pmu_train_1d_dmem.bin
 touch firmware/lpddr4_pmu_train_1d_imem.bin
