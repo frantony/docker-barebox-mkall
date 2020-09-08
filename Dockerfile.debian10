@@ -18,6 +18,7 @@ RUN apt-get update \
 		wget ca-certificates \
 		gcc-mips-linux-gnu \
 		gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross gcc-aarch64-linux-gnu \
+		gcc-riscv64-linux-gnu bsdmainutils \
 		sudo \
 	&& apt-get clean \
 	&& useradd -ms /bin/bash $BUILDUSER \

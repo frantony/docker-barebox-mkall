@@ -38,6 +38,8 @@ CROSS_COMPILE=arm-linux-gnueabi- \
 
 CROSS_COMPILE=mips-linux-gnu- ./MAKEALL -a mips $JOBS
 
+CROSS_COMPILE=riscv64-linux-gnu- ./MAKEALL -a riscv $JOBS
+
 ./MAKEALL -a x86 $JOBS
 
 ./MAKEALL -a sandbox $JOBS
