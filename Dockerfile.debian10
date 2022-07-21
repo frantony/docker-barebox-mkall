@@ -12,7 +12,7 @@ RUN apt-get update \
 		git less \
 		make gcc libc6-dev \
 		flex bison \
-		inkscape \
+		inkscape imagemagick librsvg2-bin \
 		bzip2 lzop lz4 pkg-config xz-utils \
 		libusb-1.0-0-dev libssl-dev libncursesw5-dev \
 		wget ca-certificates \
