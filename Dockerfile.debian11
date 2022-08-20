@@ -1,11 +1,11 @@
-FROM debian:10
+FROM debian:11
 
-LABEL comment="barebox Debian 10 build environment" \
+LABEL comment="barebox Debian 11 (Bullseye) build environment" \
       maintainer="Antony Pavlov <antonynpavlov@gmail.com>"
 
 # Add default user
 ENV BUILDUSER builduser
-ENV WORKDIR /home/$BUILDUSER
+ENV WORKDIR /workdir
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
@@ -16,9 +16,11 @@ RUN apt-get update \
 		bzip2 lzop lz4 pkg-config xz-utils \
 		libusb-1.0-0-dev libssl-dev libncursesw5-dev \
 		wget ca-certificates \
-		gcc-mips-linux-gnu \
-		gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf libc6-dev-armel-cross gcc-aarch64-linux-gnu \
-		gcc-riscv64-linux-gnu bsdmainutils \
+		gcc-mips-linux-gnu libc6-dev-mips-cross \
+		gcc-arm-linux-gnueabi libc6-dev-armel-cross \
+		gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
+		gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
+		gcc-riscv64-linux-gnu libc6-dev-riscv64-cross bsdmainutils \
 		sudo \
 	&& apt-get clean \
 	&& useradd -ms /bin/bash $BUILDUSER \
@@ -28,7 +30,3 @@ RUN apt-get update \
 USER $BUILDUSER
 
 WORKDIR $WORKDIR
-
-COPY --chown=$BUILDUSER:$BUILDUSER MKALL-barebox.sh $WORKDIR
-
-ENTRYPOINT [ "/bin/bash" ]
