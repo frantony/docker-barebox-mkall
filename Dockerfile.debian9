@@ -1,0 +1,38 @@
+FROM debian:9
+
+LABEL comment="barebox Debian 9 (Stretch) build environment" \
+      maintainer="Antony Pavlov <antonynpavlov@gmail.com>"
+
+# Add default user
+ENV BUILDUSER builduser
+ENV WORKDIR /workdir
+
+# use apt-cacher proxy if necessary
+#RUN echo 'Acquire::http { Proxy "http://PROXY:3142"; };' >> /etc/apt/apt.conf.d/01proxy
+
+RUN printf "deb http://archive.debian.org/debian/ stretch main contrib non-free" > /etc/apt/sources.list
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		git less \
+		make gcc libc6-dev \
+		flex bison \
+		inkscape imagemagick librsvg2-bin \
+		bzip2 lzop liblz4-tool pkg-config xz-utils \
+		libusb-1.0-0-dev libssl-dev libncursesw5-dev \
+		wget ca-certificates \
+		gcc-mips-linux-gnu libc6-dev-mips-cross \
+		gcc-arm-linux-gnueabi libc6-dev-armel-cross \
+		gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
+		gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
+		bc libelf-dev \
+		vim file \
+		sudo \
+	&& apt-get clean \
+	&& useradd -ms /bin/bash $BUILDUSER \
+	&& adduser $BUILDUSER sudo \
+	&& echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/sudo-nopasswd
+
+USER $BUILDUSER
+
+WORKDIR $WORKDIR
